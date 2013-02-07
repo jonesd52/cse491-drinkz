@@ -61,6 +61,32 @@ def test_bulk_load_inventory_1():
 
     assert db.check_inventory('Johnnie Walker', 'Black Label')
     assert n == 1, n
+    
+def test_bulk_load_inventory_2():
+#   Loads in a text file to test the bulk loader for inventory
+    db._reset_db()
+    
+    db.add_bottle_type('Johnnie Walker', 'Black Label', 'blended scotch')
+    
+    f = open("./test-data/bottle-types-data-1.txt")
+    n = load_bulk_data.load_inventory(f)
+    
+    assert db.check_inventory('Johnnie Walker', 'Black Label')
+    assert n ==1, n
+    
+def test_bulk_load_inventory_3():
+#   Tests the text file, with white space included.
+    
+    db._reset_db()
+    
+    db.add_bottle_type('Johnnie Walker', 'Black Label', 'blended scotch')
+    
+    f = open("./test-data/bottle-types-data-2.txt")
+    n = load_bulk_data.load_inventory(f)
+    
+    assert db.check_inventory('Johnnie Walker', 'Black Label')
+    assert n ==1, n    
+    
 
 def test_get_liquor_amount_2():
     db._reset_db()

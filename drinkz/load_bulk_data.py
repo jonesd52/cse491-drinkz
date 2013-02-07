@@ -12,6 +12,28 @@ import csv                              # Python csv package
 
 from . import db                        # import from local package
 
+def read_data(i_file):
+  
+    reader = csv.reader(i_file)
+    
+    x = []
+    
+    for line in reader:
+        print line
+        if not line:
+	    continue
+        if not line[0].strip():
+	    continue
+        if line[0].startswith('#'):
+	    continue
+	  
+	x.append(line)
+
+    print x
+    return x
+    
+    
+
 def load_bottle_types(fp):
     """
     Loads in data of the form manufacturer/liquor name/type from a CSV file.
@@ -22,15 +44,14 @@ def load_bottle_types(fp):
 
     Returns number of bottle types loaded
     """
-    reader = csv.reader(fp)
+    #reader = csv.reader(fp)
+    new_reader = read_data(fp)
 
     x = []
     n = 0
-    for line in reader:
-        if line[0].startswith('#'):
-            continue
-        
-        (mfg, name, typ) = line
+    
+    
+    for (mfg, name, typ) in new_reader:
         n += 1
         db.add_bottle_type(mfg, name, typ)
 
@@ -49,12 +70,15 @@ def load_inventory(fp):
     Note that a LiquorMissing exception is raised if bottle_types_db does
     not contain the manufacturer and liquor name already.
     """
-    reader = csv.reader(fp)
+    #reader = csv.reader(fp)
+    new_reader = read_data(fp)
 
     x = []
     n = 0
-    for (mfg, name, amount) in reader:
-        n += 1
+    
+    
+    for (mfg,name,amount) in new_reader:
+	n += 1
         db.add_to_inventory(mfg, name, amount)
 
     return n

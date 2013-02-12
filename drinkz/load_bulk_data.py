@@ -19,18 +19,9 @@ def read_data(i_file):
     x = []
     
     for line in reader:
-        print line
-        if not line:
-	    continue
-        if not line[0].strip():
-	    continue
-        if line[0].startswith('#'):
-	    continue
-	  
-	x.append(line)
-
-    print x
-    return x
+        if not line or not line[0].strip() or line[0].startswith('#'):
+            continue
+        yield line
     
     
 
@@ -50,8 +41,13 @@ def load_bottle_types(fp):
     x = []
     n = 0
     
-    
-    for (mfg, name, typ) in new_reader:
+    for line in new_reader:
+        try:
+            (mfg, name, typ) = line
+        except ValueError:
+            print 'Badly formatted line: %s' % line
+	    continue
+
         n += 1
         db.add_bottle_type(mfg, name, typ)
 
@@ -76,9 +72,14 @@ def load_inventory(fp):
     x = []
     n = 0
     
-    
-    for (mfg,name,amount) in new_reader:
-	n += 1
+    for line in new_reader:
+        try:
+            (mfg, name, amount) = line
+        except ValueError:
+	    print 'Badly formatted line: %s' % line
+	    continue
+
+        n += 1
         db.add_to_inventory(mfg, name, amount)
 
     return n

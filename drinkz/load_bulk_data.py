@@ -48,6 +48,7 @@ def load_bottle_types(fp):
             print 'Badly formatted line: %s' % line
 	    continue
 
+        
         n += 1
         db.add_bottle_type(mfg, name, typ)
 
@@ -78,8 +79,9 @@ def load_inventory(fp):
         except ValueError:
 	    print 'Badly formatted line: %s' % line
 	    continue
-
+    
         n += 1
         db.add_to_inventory(mfg, name, amount)
 
     return n
+

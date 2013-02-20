@@ -109,6 +109,6 @@ def _add_liquors_amount(amount_1, amount_2):
     
 def add_recipe(r):
     "Add a recipe to the dictionary of recipes"
-    
+    _recipes_db[r.name] = 
     
     pass

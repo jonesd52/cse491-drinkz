@@ -5,6 +5,7 @@ Database functionality for drinkz information.
 # private singleton variables at module level
 _bottle_types_db = set()
 _inventory_db = dict()
+_recipes_db = dict()
 
 def _reset_db():
     "A method only to be used during testing -- toss the existing db info."
@@ -77,7 +78,7 @@ def get_liquor_amount(mfg, liquor):
          amount = convert_to_ml(amount)
          total += amount
 
-    return "%s ml" % (total,)
+    return float(total)
 
 def get_liquor_inventory():
     "Retrieve all liquor types in inventory, in tuple form: (mfg, liquor)."
@@ -104,3 +105,10 @@ def _add_liquors_amount(amount_1, amount_2):
 	    raise Exception("unknown unit %s" %units)
 
     return "%s ml" % (total,)
+    
+    
+def add_recipe(r):
+    "Add a recipe to the dictionary of recipes"
+    
+    
+    pass

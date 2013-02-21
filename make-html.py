@@ -37,6 +37,8 @@ db.add_recipe(r)
 db.add_recipe(s)
 db.add_recipe(t)
 
+RCPs = db.get_all_recipes()
+
 
 fp = open('html/index.html', 'w')
 print >>fp, """<p><a href='inventory.html'>Inventory</a></p>
@@ -58,12 +60,20 @@ print >>fp, """
 <th>Can We Make It?</th>
 </tr>"""
 
-for mfg, liquor in db.get_liquor_inventory():
-    x = db.get_liquor_amount( mfg, liquor)
-    print >> fp, "<tr><td>%s</td><td align=center>%s</td></tr>" % (mfg, x)
+for r in RCPs:
+    a = r.need_ingredients()
+    if( a != [] ):
+        print >> fp, "<tr><td>%s</td><td align=center>&#x2717;</td></tr>" % (r.name,)
+    else:
+        print >> fp, "<tr><td>%s</td><td align=center>&#x2713;</td></tr>" % (r.name,)
 
 
 print >> fp , "</table>" 
+
+print >>fp, """<p><a href='index.html'>Index</a></p>
+<p><a href='inventory.html'>Inventory</a></p>
+<p><a href='liquor_types.html'>Liquor Types</a></p>
+"""
 
 fp.close()
 
@@ -86,6 +96,11 @@ for mfg, liquor in db.get_liquor_inventory():
 
 print >> fp , "</table>" 
 
+print >>fp, """<p><a href='index.html'>Index</a></p>
+<p><a href='recipes.html'>Recipes</a></p>
+<p><a href='liquor_types.html'>Liquor Types</a></p>
+"""
+
 
 fp.close()
 
@@ -97,21 +112,31 @@ fp = open('html/liquor_types.html', 'w')
 print >> fp, """ 
 <table border="1">
 <tr>
-<th>Liquor Type</th>
 <th>Maker</th>
+<th>Liqour</th>
+<th>Type</th>
+<th>Is It Delicious?</th>
 </tr>"""
 
-for m, l in db.get_liquor_inventory():
-    x = db.get_liquor_amount( m, l )
-    print >> fp, "<tr><td>%s</td><td align=center>%s</td></tr>" % (m, x)
+for (m, l, t) in db._bottle_types_db:
+    if(t == "blended scotch"):
+        print >> fp, "<tr><td>%s</td><td>%s</td><td>%s</td><td align=center>Indeed!</td></tr>" % (m, l, t)
+    else:
+        print >> fp, "<tr><td>%s</td><td>%s</td><td>%s</td><td align=center>NOPE!</td></tr>" % (m, l, t)
 
 
 print >> fp , "</table>" 
 
+print >>fp, """<p><a href='index.html'>Index</a></p>
+<p><a href='inventory.html'>Inventory</a></p>
+<p><a href='recipes.html'>Recipes</a></p>
+"""
+
 fp.close()
 
 
-# a checkmark &#x2713;
+# a checkmark   &#x2713;
+# an x mark   &#x2717;
 
 
 

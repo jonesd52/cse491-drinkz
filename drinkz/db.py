@@ -1,5 +1,8 @@
 """
 Database functionality for drinkz information.
+
+Saved the recipes in a dictionary.  Allows me to save the name as the key to the dictionary, with the recipe as the value.
+Cannot have two different recipes with the same name.
 """
 
 # private singleton variables at module level
@@ -9,13 +12,17 @@ _recipes_db = dict()
 
 def _reset_db():
     "A method only to be used during testing -- toss the existing db info."
-    global _bottle_types_db, _inventory_db
+    global _bottle_types_db, _inventory_db, _recipes_db
     _bottle_types_db = set()
     _inventory_db = dict()
+    _recipes_db = dict()
 
 # exceptions in Python inherit from Exception and generally don't need to
 # override any methods.
 class LiquorMissing(Exception):
+    pass
+
+class DuplicateRecipeName(Exception):
     pass
 
 def add_bottle_type(mfg, liquor, typ):
@@ -36,8 +43,10 @@ def add_to_inventory(mfg, liquor, amount):
         raise LiquorMissing(err)
 
     if check_inventory(mfg, liquor):
-        new_amt = _add_liquors_amount(amount, _inventory_db[(mfg,liquor)])
-        _inventory_db[(mfg,liquor)] = new_amt
+        new_amt = convert_to_ml(amount)
+        old = convert_to_ml(_inventory_db[(mfg,liquor)])
+        totes = new_amt + old
+        _inventory_db[(mfg,liquor)] = "%s ml" % (totes,)
 
     else:
         _inventory_db[(mfg, liquor)] = amount
@@ -50,6 +59,7 @@ def check_inventory(mfg, liquor):
     return False
 
 def convert_to_ml(amount):
+
     num, units = amount.split()
     num = float(num)
     units = units.lower()
@@ -61,6 +71,8 @@ def convert_to_ml(amount):
         total += 29.5735 * num
     elif units == 'gallon':
         total += 3785.41 * num
+    elif units == 'liter':
+        total += 1000 * num
     else:
         raise Exception("unknown unit %s" % units)
 
@@ -109,6 +121,32 @@ def _add_liquors_amount(amount_1, amount_2):
     
 def add_recipe(r):
     "Add a recipe to the dictionary of recipes"
-    _recipes_db[r.name] = 
-    
-    pass
+    err = "Recipe %s already in database " % (r.name,)
+    if (r.name in _recipes_db):
+	print "Why don't you work!?!?!?"
+        raise DuplicateRecipeName()
+    else:
+        _recipes_db[r.name]=r
+
+def get_recipe(name):
+    for x in _recipes_db:
+        if(x == name):
+            return _recipes_db[x]
+    return False
+
+def get_all_recipes():
+    recipes = set()
+    for x in _recipes_db:
+        recipes.add(_recipes_db[x])
+    return recipes
+
+def check_for_type(typ):
+    liquor_types = set()
+    for (m, l, t) in _bottle_types_db:
+        if t == typ:
+            liquor_types.add((m,l))
+    return liquor_types
+
+
+
+

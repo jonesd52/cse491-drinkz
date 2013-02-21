@@ -25,14 +25,16 @@ class TestBasicRecipeStuff(unittest.TestCase):
         assert len(x) == 1              # should be only one recipe
         assert r in x
 
-    def test_get_recipe_2(self):
+    def test_add_recipe_2(self):
         r = recipes.Recipe('scotch on the rocks', [('blended scotch',
                                                    '4 oz')])
         db.add_recipe(r)
             
         r2 = recipes.Recipe('scotch on the rocks', [('vodka', '4 oz')])
         try:
+	    print "What?"
             db.add_recipe(r2)
+            print "Did I hit this instead?"
             assert 0, "this is a duplicate recipe and the add should fail"
         except db.DuplicateRecipeName:
             pass                        # success, we got an exception
@@ -44,10 +46,13 @@ class TestBasicRecipeStuff(unittest.TestCase):
         db.add_recipe(r)
 
         x = db.get_recipe('scotch on the rocks')
+	print x
+	print r
         assert x == r
 
     def test_get_recipe_2(self):
         x = db.get_recipe('scotch on the rocks')
+	print x
         assert not x, x                    # no such recipe
 
 class TestIngredients(object):

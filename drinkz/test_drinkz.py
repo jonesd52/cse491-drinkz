@@ -247,3 +247,51 @@ def test_get_liquor_inventory():
         x.append((mfg, liquor))
 
     assert x == [('Johnnie Walker', 'Black Label')], x
+    
+def test_return_types_1():
+    db._reset_db()
+    
+    db.add_bottle_type('Johnnie Walker', 'black label', 'blended scotch')
+    db.add_to_inventory('Johnnie Walker', 'black label', '500 ml')
+
+    db.add_bottle_type('Uncle Herman\'s', 'moonshine', 'blended scotch')
+    db.add_to_inventory('Uncle Herman\'s', 'moonshine', '5 liter')
+    
+    x = db.check_for_type("blended scotch")
+    y = set()
+    y.add(('Johnnie Walker', 'black label'))
+    y.add(('Uncle Herman\'s', 'moonshine'))
+    
+    assert x == y
+
+def test_conversions_1():
+    db._reset_db()
+    
+    x = db.convert_to_ml("4.5 liter")
+    
+    assert x == 4500.0
+    
+def test_conversions_2():
+    db._reset_db()
+    
+    x = db.convert_to_ml("3.2 gallon")
+    
+    assert x == 12113.312    
+
+def test_conversions_3():
+    db._reset_db()
+    
+    x = db.convert_to_ml("3245.56 ml")
+    
+    assert x == 3245.56
+
+def test_conversions_4():
+    db._reset_db()
+    
+    x = db.convert_to_ml("34 oz")
+    
+    print x
+    assert x == 1005.499
+
+
+

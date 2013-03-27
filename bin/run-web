@@ -8,6 +8,21 @@ def main(args):
         print >> sys.stderr, 'Usage: %s port number'
 	return -1
 
+    port = random.randint(8000,9999)
+
+    webserv = app.SimpleApp()
+
+    httpd = make_server('', port, webserv)
+
+    print "Serving on port %d..." % port
+    print "Try using a Web broswer to go to http://%s:%d" % \
+	(socket.getfqdn(), port)
+
+    httpd.serve_forever()
+
+if __name__ == '__main__':
+    exit_code = main(sys.argv)
+    sys.exit(exit_code)
     
 
 

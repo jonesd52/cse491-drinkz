@@ -59,6 +59,9 @@ def check_inventory(mfg, liquor):
     return False
 
 def convert_to_ml(amount):
+    """This function returns the amount of a liquor in
+    milliliters.
+    """
 
     num, units = amount.split()
     num = float(num)
@@ -97,28 +100,6 @@ def get_liquor_inventory():
     for key in _inventory_db:
         yield key
 
-def _add_liquors_amount(amount_1, amount_2):
-    # Adds the amounts of the same liquor together
-    total = 0.0
-    amount = []
-    amount.append(amount_1)
-    amount.append(amount_2)
-    
-    for amt in amount:
-        num, units = amt.split()
-        num = float(num)
-        units = units.lower()
-
-        if units == 'ml':
-	    total += num
-	elif units == 'oz':
-	    total += 29.5735 * num
-	else:
-	    raise Exception("unknown unit %s" %units)
-
-    return "%s ml" % (total,)
-    
-    
 def add_recipe(r):
     "Add a recipe to the dictionary of recipes"
     err = "Recipe %s already in database " % (r.name,)
@@ -129,18 +110,21 @@ def add_recipe(r):
         _recipes_db[r.name]=r
 
 def get_recipe(name):
+    "Get a recipe name"
     for x in _recipes_db:
         if(x == name):
             return _recipes_db[x]
     return False
 
 def get_all_recipes():
+    "Retrieve all recipes"
     recipes = set()
     for x in _recipes_db:
         recipes.add(_recipes_db[x])
     return recipes
 
 def check_for_type(typ):
+    "Check for liquor types"
     liquor_types = set()
     for (m, l, t) in _bottle_types_db:
         if t == typ:

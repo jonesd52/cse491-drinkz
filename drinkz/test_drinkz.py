@@ -165,11 +165,14 @@ def test_get_liquor_amount_4():
 #    fp = StringIO(data)                 # make this look like a file handle
 #    n = load_bulk_data.load_inventory(fp)
 #
+#    amount = db.get_liquor_amount('Johnnie Walker', 'Black Label')
+#
 #    try:
 #        amount = db.get_liquor_amount('Johnnie Walker', 'Black Label')
 #        assert 0
 #    except:
 #        pass                            # we expect to see an error about gallons
+#
 
 def test_bulk_load_bottle_types_1():
     db._reset_db()

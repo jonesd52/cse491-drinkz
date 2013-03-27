@@ -45,36 +45,44 @@ Visit:
 <p>
 <img src='/helmet'>
 """
+	print "Index"
+	print start_response
         
     def somefile(self, environ, start_response):
-        content_type = 'text/html'
+        print "Somefile"
+	content_type = 'text/html'
         data = open('somefile.html').read()
-
         start_response('200 OK', list(html_headers))
         return [data]
 
     def error(self, environ, start_response):
+	print 'Error'
         status = "404 Not Found"
         content_type = 'text/html'
         data = "Couldn't find your stuff."
        
+
         start_response('200 OK', list(html_headers))
         return [data]
 
     def helmet(self, environ, start_response):
+	print 'helmet'
         content_type = 'image/gif'
         data = open('Spartan-helmet-Black-150-pxls.gif', 'rb').read()
+
 
         start_response('200 OK', [('Content-type', content_type)])
         return [data]
 
     def form(self, environ, start_response):
+	print 'form'
         data = form()
 
         start_response('200 OK', list(html_headers))
         return [data]
    
     def recv(self, environ, start_response):
+	print 'recv'
         formdata = environ['QUERY_STRING']
         results = urlparse.parse_qs(formdata)
 
@@ -84,6 +92,7 @@ Visit:
         content_type = 'text/html'
         data = "First name: %s; last name: %s.  <a href='./'>return to index</a>" % (firstname, lastname)
 
+
         start_response('200 OK', list(html_headers))
         return [data]
 
@@ -92,6 +101,7 @@ Visit:
         # with the size of the data specified by CONTENT_LENGTH;
         # see the WSGI PEP.
         
+	print 'dispatch_rpc'
         if environ['REQUEST_METHOD'].endswith('POST'):
             body = None
             if environ.get('CONTENT_LENGTH'):
@@ -99,7 +109,6 @@ Visit:
                 body = environ['wsgi.input'].read(length)
                 response = self._dispatch(body) + '\n'
                 start_response('200 OK', [('Content-Type', 'application/json')])
-
                 return [response]
 
         # default to a non JSON-RPC error.
@@ -107,13 +116,16 @@ Visit:
         content_type = 'text/html'
         data = "Couldn't find your stuff."
        
+
         start_response('200 OK', list(html_headers))
         return [data]
 
     def _decode(self, json):
+	print 'decode'
         return simplejson.loads(json)
 
     def _dispatch(self, json):
+	print 'dispatch'
         rpc_request = self._decode(json)
 
         method = rpc_request['method']
@@ -122,18 +134,21 @@ Visit:
         rpc_fn_name = 'rpc_' + method
         fn = getattr(self, rpc_fn_name)
         result = fn(*params)
-
+	
         response = { 'result' : result, 'error' : None, 'id' : 1 }
-        response = simplejson.dumps(response)
+	response = simplejson.dumps(response)
         return str(response)
 
     def rpc_hello(self):
-        return 'world!'
+	print 'huh?'
+	return 'world!'
 
     def rpc_add(self, a, b):
+	print 'add'
         return int(a) + int(b)
     
 def form():
+    print "Form?"
     return """
 <form action='recv'>
 Your first name? <input type='text' name='firstname' size'20'>
@@ -153,3 +168,4 @@ if __name__ == '__main__':
     print "Try using a Web browser to go to http://%s:%d/" % \
           (socket.getfqdn(), port)
     httpd.serve_forever()
+

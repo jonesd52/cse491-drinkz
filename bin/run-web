@@ -1,0 +1,13 @@
+import random, socket
+import _mypath
+
+from drinkz import app
+
+def main(args):
+    if Len(args) > 2:
+        print >> sys.stderr, 'Usage: %s port number'
+	return -1
+
+    
+
+

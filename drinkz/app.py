@@ -4,10 +4,15 @@ from wsgiref.simple_server import make_server
 import dynamic_html
 
 import urlparse
-import db
 import simplejson
 
+import sys
+
 import os.path
+
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
+from drinkz import db
 
 dispatch = {
     '/' : 'index',
@@ -21,6 +26,9 @@ dispatch = {
 }
 
 html_headers = [('Content-type', 'text/html')]
+
+sample_db = os.path.dirname(__file__) + '/../SAMPLE-DATABASE-FOR-3C'
+db.load_db(sample_db)
 
 class SimpleApp(object):
     def __call__(self, environ, start_response):
@@ -40,6 +48,7 @@ class SimpleApp(object):
         return fn(environ, start_response)
             
     def index(self, environ, start_response):
+      
         data = dynamic_html.Index()
         start_response('200 OK', list(html_headers))
         return [data]

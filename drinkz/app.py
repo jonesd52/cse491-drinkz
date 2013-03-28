@@ -24,8 +24,6 @@ dispatch = {
 
 html_headers = [('Content-type', 'text/html')]
 
-db.load_db(sample_db)
-
 class SimpleApp(object):
     def __call__(self, environ, start_response):
 
@@ -55,6 +53,11 @@ class SimpleApp(object):
        
         start_response('200 OK', list(html_headers))
         return [data]
+        
+    def loadfile(self):
+        #sample_db = os.path.dirname(__file__) + '/../SAMPLE-DATABASE-FOR-3C'
+        #db.load_db(sample_db)
+        pass
         
     def recipes(self, environ, start_response):
         content_type = 'text/html'
@@ -128,4 +131,7 @@ if __name__ == '__main__':
     print "Try using a Web browser to go to http://%s:%d/" % \
           (socket.getfqdn(), port)
     httpd.serve_forever()
+    
+def __init__():
+    pass
 

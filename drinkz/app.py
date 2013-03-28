@@ -9,8 +9,6 @@ import simplejson
 
 import os.path
 
-sample_db = os.path.dirname(__file__) + '/../SAMPLE-DATABASE-FOR-3C'
-
 dispatch = {
     '/' : 'index',
     '/error' : 'error',

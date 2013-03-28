@@ -1,0 +1,107 @@
+(lp1
+c__builtin__
+set
+p2
+((lp3
+(S'Johnnie Walker'
+p4
+S'black label'
+p5
+S'blended scotch'
+p6
+tp7
+a(S'Gray Goose'
+p8
+S'vodka'
+p9
+S'unflavored vodka'
+p10
+tp11
+a(S"Uncle Herman's"
+p12
+S'moonshine'
+p13
+g6
+tp14
+a(S'Rossi'
+p15
+S'extra dry vermouth'
+p16
+S'vermouth'
+p17
+tp18
+atRp19
+a(dp20
+(g4
+g5
+tp21
+S'500 ml'
+p22
+s(g15
+g16
+tp23
+S'24 oz'
+p24
+s(g12
+g13
+tp25
+S'5 liter'
+p26
+s(g8
+g9
+tp27
+S'1 liter'
+p28
+sa(dp29
+S'scotch on the rocks'
+p30
+(idrinkz.recipes
+Recipe
+p31
+(dp32
+S'name'
+p33
+g30
+sS'ingredients'
+p34
+(lp35
+(g6
+S'4 oz'
+p36
+tp37
+asbsS'vomit inducing martini'
+p38
+(idrinkz.recipes
+Recipe
+p39
+(dp40
+g33
+g38
+sg34
+(lp41
+(S'orange juice'
+p42
+S'6 oz'
+p43
+tp44
+a(g17
+S'1.5 oz'
+p45
+tp46
+asbsS'vodka martini'
+p47
+(idrinkz.recipes
+Recipe
+p48
+(dp49
+g33
+g47
+sg34
+(lp50
+(g10
+g43
+tp51
+a(g17
+g45
+tp52
+asbsa.

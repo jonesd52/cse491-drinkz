@@ -1,11 +1,14 @@
 import random, socket
+from wsgiref.simple_server import make_server
+
+import sys
 import _mypath
 
 from drinkz import app
 
 def main(args):
-    if Len(args) > 2:
-        print >> sys.stderr, 'Usage: %s port number'
+    if len(args) > 1:
+        print >> sys.stderr, 'Usage: just run it'
 	return -1
 
     port = random.randint(8000,9999)

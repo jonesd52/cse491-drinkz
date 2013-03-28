@@ -1,17 +1,21 @@
 #! /usr/bin/env python
 
 from wsgiref.simple_server import make_server
+import dynamic_html
+
 import urlparse
+import db
 import simplejson
 
 dispatch = {
     '/' : 'index',
-    '/content' : 'somefile',
     '/error' : 'error',
-    '/helmet' : 'helmet',
-    '/form' : 'form',
-    '/recv' : 'recv',
-    '/rpc'  : 'dispatch_rpc'
+    '/recipes' : 'recipes',
+    '/inventory' : 'inventory',
+    '/liquor_types' : 'liquor_type',
+    '/input_amount' : 'input_amount',
+    '/output_ml' : 'ml_output',
+    
 }
 
 html_headers = [('Content-type', 'text/html')]
@@ -34,128 +38,78 @@ class SimpleApp(object):
         return fn(environ, start_response)
             
     def index(self, environ, start_response):
-        data = """\
-Visit:
-<a href='content'>a file</a>,
-<a href='error'>an error</a>,
-<a href='helmet'>an image</a>,
-<a href='somethingelse'>something else</a>, or
-<a href='form'>a form</a>,
-<a href='index'> and a page of stuff.</a>
-<p>
-<img src='/helmet'>
-"""
-	print "Index"
-	print start_response
-        
-    def somefile(self, environ, start_response):
-        print "Somefile"
-	content_type = 'text/html'
-        data = open('somefile.html').read()
+        data = dynamic_html.Index()
         start_response('200 OK', list(html_headers))
         return [data]
-
+        
     def error(self, environ, start_response):
-	print 'Error'
         status = "404 Not Found"
         content_type = 'text/html'
         data = "Couldn't find your stuff."
        
-
+        start_response('200 OK', list(html_headers))
+        return [data]
+        
+    def recipes(self, environ, start_response):
+        content_type = 'text/html'
+        data = dynamic_html.Recipes()
+        
         start_response('200 OK', list(html_headers))
         return [data]
 
-    def helmet(self, environ, start_response):
-	print 'helmet'
-        content_type = 'image/gif'
-        data = open('Spartan-helmet-Black-150-pxls.gif', 'rb').read()
-
-
-        start_response('200 OK', [('Content-type', content_type)])
+    def inventory(self, environ, start_response):
+        content_type = 'text/html'
+        data = dynamic_html.Inventory()
+        
+        start_response('200 OK', list(html_headers))
         return [data]
-
-    def form(self, environ, start_response):
-	print 'form'
+        
+    def liquor_type(self, environ, start_response):
+        content_type = 'text/html'
+        data = dynamic_html.Liquor_Types()
+        
+        start_response('200 OK', list(html_headers))
+        return [data]
+        
+    def input_amount(self, environ, start_response):
         data = form()
-
         start_response('200 OK', list(html_headers))
         return [data]
-   
-    def recv(self, environ, start_response):
-	print 'recv'
+        
+    def ml_output(self, environ, start_response):
         formdata = environ['QUERY_STRING']
         results = urlparse.parse_qs(formdata)
 
-        firstname = results['firstname'][0]
-        lastname = results['lastname'][0]
-
-        content_type = 'text/html'
-        data = "First name: %s; last name: %s.  <a href='./'>return to index</a>" % (firstname, lastname)
-
-
+        number = results['number'][0]
+        unit = results['unit'][0]
+        
+        show = conversion(number, unit)
+        data = "Converted Amount: %s ml" % show
+        data += "<p><a href='/'>Index</a></p>"
+      
         start_response('200 OK', list(html_headers))
         return [data]
 
-    def dispatch_rpc(self, environ, start_response):
-        # POST requests deliver input data via a file-like handle,
-        # with the size of the data specified by CONTENT_LENGTH;
-        # see the WSGI PEP.
-        
-	print 'dispatch_rpc'
-        if environ['REQUEST_METHOD'].endswith('POST'):
-            body = None
-            if environ.get('CONTENT_LENGTH'):
-                length = int(environ['CONTENT_LENGTH'])
-                body = environ['wsgi.input'].read(length)
-                response = self._dispatch(body) + '\n'
-                start_response('200 OK', [('Content-Type', 'application/json')])
-                return [response]
-
-        # default to a non JSON-RPC error.
-        status = "404 Not Found"
-        content_type = 'text/html'
-        data = "Couldn't find your stuff."
-       
-
-        start_response('200 OK', list(html_headers))
-        return [data]
-
-    def _decode(self, json):
-	print 'decode'
-        return simplejson.loads(json)
-
-    def _dispatch(self, json):
-	print 'dispatch'
-        rpc_request = self._decode(json)
-
-        method = rpc_request['method']
-        params = rpc_request['params']
-        
-        rpc_fn_name = 'rpc_' + method
-        fn = getattr(self, rpc_fn_name)
-        result = fn(*params)
-	
-        response = { 'result' : result, 'error' : None, 'id' : 1 }
-	response = simplejson.dumps(response)
-        return str(response)
-
-    def rpc_hello(self):
-	print 'huh?'
-	return 'world!'
-
-    def rpc_add(self, a, b):
-	print 'add'
-        return int(a) + int(b)
     
 def form():
-    print "Form?"
     return """
-<form action='recv'>
-Your first name? <input type='text' name='firstname' size'20'>
-Your last name? <input type='text' name='lastname' size='20'>
+<form action='output_ml'>
+Amount to convert: <input type='text' name='number' size'20'> <select name="unit">
+<option value="ml">Milliliters</option>
+<option value="liter">Liters</option>
+<option value="oz">Ounces</option>
+<option value="gallon">Gallons</option>
+</select>
 <input type='submit'>
 </form>
+<p><a href='/'>Index</a></p>
 """
+
+def conversion(number, unit):
+    amount = '%s %s' % (number,unit)
+    amount = db.convert_to_ml(amount)
+    return amount
+    
 
 if __name__ == '__main__':
     import random, socket

@@ -6,6 +6,7 @@ Cannot have two different recipes with the same name.
 """
 
 from cPickle import dump, load
+import recipes  
 
 # private singleton variables at module level
 _bottle_types_db = set()
@@ -21,18 +22,20 @@ def _reset_db():
 
 def save_db(filename):
     fp = open(filename, 'wb')
+    
+    print _recipes_db
 
-    tosave = (_bottle_types_db, _inventory_db)
+    tosave = [_bottle_types_db, _inventory_db,_recipes_db]
     dump(tosave, fp)
 
     fp.close()
 
 def load_db(filename):
-    global _bottle_types_db, _inventory_db
+    global _bottle_types_db, _inventory_db,_recipes_db
     fp = open(filename, 'rb')
 
     loaded = load(fp)
-    (_bottle_types_db, _inventory_db) = loaded
+    [_bottle_types_db, _inventory_db,_recipes_db] = loaded
 
     fp.close()
 
@@ -122,8 +125,8 @@ def get_liquor_inventory():
 def add_recipe(r):
     "Add a recipe to the dictionary of recipes"
     err = "Recipe %s already in database " % (r.name,)
+    
     if (r.name in _recipes_db):
-	print "Why don't you work!?!?!?"
         raise DuplicateRecipeName()
     else:
         _recipes_db[r.name]=r

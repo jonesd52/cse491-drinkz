@@ -7,6 +7,10 @@ import urlparse
 import db
 import simplejson
 
+import os.path
+
+sample_db = os.path.dirname(__file__) + '/../SAMPLE-DATABASE-FOR-3C'
+
 dispatch = {
     '/' : 'index',
     '/error' : 'error',
@@ -19,6 +23,8 @@ dispatch = {
 }
 
 html_headers = [('Content-type', 'text/html')]
+
+db.load_db(sample_db)
 
 class SimpleApp(object):
     def __call__(self, environ, start_response):

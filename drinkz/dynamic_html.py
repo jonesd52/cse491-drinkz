@@ -4,14 +4,8 @@ Using the cse491-linkz example to create html files
 """
 
 import os
-from drinkz import db
-from drinkz import recipes
-
-try:
-    os.mkdir('html')
-except OSError:
-    # already exists
-    pass
+import db
+import recipes
 
 ###
 
@@ -36,6 +30,8 @@ t = recipes.Recipe('vomit inducing martini', [('orange juice','6 oz'),('vermouth
 db.add_recipe(r)
 db.add_recipe(s)
 db.add_recipe(t)
+
+print db._recipes_db
 
 db._reset_db()
 

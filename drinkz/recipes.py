@@ -2,7 +2,7 @@
 Functionality for a Recipe class
 """
 
-from . import db
+import db
 
 class Recipe:
     def __init__(self, name, ingredients):

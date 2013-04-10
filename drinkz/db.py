@@ -151,6 +151,13 @@ def check_for_type(typ):
             liquor_types.add((m,l))
     return liquor_types
 
+def recipes_can_make():
+    "Return a list of recipes that can be made"
+    can_make = []
+    
+    for recipe in _recipes_db:
+        if (recipe.need_ingredients() == []):
+            can_make.append(recipe)
 
-
+    return can_make
 

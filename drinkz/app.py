@@ -26,6 +26,8 @@ dispatch = {
     '/added_liquor': 'addedliquor',
     '/add_inventory' : 'add_to_inventory',
     '/added_inventory' : 'addedinventory',
+    '/add_a_recipe': 'add_recipe',
+    '/added_recipe': 'addedrecipe',
 }
 
 html_headers = [('Content-type', 'text/html')]
@@ -152,6 +154,31 @@ class SimpleApp(object):
         data = add_to_inventory_form()
         start_response('200 OK', list(html_headers))
         return [data]
+        
+    def add_recipe(self, environ, start_response):
+        data = add_recipe_form()
+        start_response('200 OK', list(html_headers))
+        return [data]
+        
+    def addedrecipe(self, environ, start_response):
+        formdata = environ["QUERY_STRING"]
+        results = urlparse.parse_qs(formdata)
+        
+        mfg = results['name'][0]
+        ing1 = results['ing1'][0]
+        if (ing2 != "")
+            ing2 = results['ing2'][0]
+        if (ing3 != "")
+            ing3 = results['ing3'][0]
+        if (ing4 != "")
+            ing4 = results['ing4'][0]
+        if (ing5 != "")
+            ing5 = results['ing5'][0]
+            
+        
+        
+        start_response('200 OK', list(html_headers))
+        return [data]
     
     def addedliquor(self, environ, start_response):
         formdata = environ['QUERY_STRING']
@@ -239,6 +266,20 @@ def add_to_inventory_form():
 Manufacturer: <input type='text' name='manu'>
 Liquor: <input type='text' name='liquor'>
 Amount: <input type='text' name='amount'>
+<input type='submit'>
+</form>
+<p><a href='/'>Index</a></p>
+"""
+
+def add_recipe_form():
+    return """
+<form action='added_recipe'>
+<p>Name: <input type='text' name='name'></p>
+<p>Ingredient #1: <input type='text' name='ing1'></p>
+<p>Ingredient #2: <input type='text' name='ing2'></p>
+<p>Ingredient #3: <input type='text' name='ing3'></p>
+<p>Ingredient #4: <input type='text' name='ing4'></p>
+<p>Ingredient #5: <input type='text' name='ing5'></p>
 <input type='submit'>
 </form>
 <p><a href='/'>Index</a></p>

@@ -1,0 +1,10 @@
+# Format for bulk loading recipes
+# <Name>|<Ingredient #1, Amount> / <Ingredient #2, Amount> / <Ingredient #3, Amount>
+# Name and ingredients separated by a '|'
+# Ingredients listed as ingredient, amount  separated by a ','
+# Separate ingredients separated by a '/'
+# Lines beginning with a '#' will not be read as a recipe
+scotch on the rocks|blended scotch,2 oz
+# This would be a valid recipe file
+vodka martini|unflavored vodka, 1.5 oz/vermouth,2 oz
+# However, file load-recipes-hw5 is provided, which loads more recipes, and looks nicer

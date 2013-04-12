@@ -1,4 +1,4 @@
-# TO BE FILLED IN
+#! /usr/bin/env python
  
 import sys
 import _mypath

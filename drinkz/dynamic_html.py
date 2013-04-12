@@ -8,7 +8,13 @@ import db
 import recipes
 
 def Index():
-    return """<p><a href='inventory'>Inventory</a></p><p><a href='recipes'>Recipes</a></p><p><a href='liquor_types'>Liquor Types</a></p><p><a href='input_amount'>Convert an Amount</a></p>"""
+    return """<p><a href='inventory'>Inventory</a></p>
+<p><a href='recipes'>Recipes</a></p>
+<p><a href='liquor_types'>Liquor Types</a></p>
+<p><a href='input_amount'>Convert an Amount</a></p>
+<p><a href='add_liquor_type'>Add A Liquor Type</a></p>
+<p><a href='add_inventory'>Add To Inventory</a></p>
+"""
 
 
 ###
@@ -36,6 +42,8 @@ def Recipes():
 def Inventory():
 
     fp =  """<table border="1"><tr><th>Liquor</th><th>Amount (in mL)</th></tr>"""
+    
+    print db._bottle_types_db
 
     for mfg, liquor in db.get_liquor_inventory():
         x = db.get_liquor_amount( mfg, liquor)

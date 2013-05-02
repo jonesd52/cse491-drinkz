@@ -3,6 +3,8 @@ import random
 import socket
 import time
 from drinkz.app import SimpleApp
+import simplejson
+import StringIO
 
 the_app = SimpleApp()
 
@@ -36,16 +38,30 @@ while True:
    request_type, path, protocol = request_line.split()
    print 'GOT', request_type, path, protocol
 
-   request_headers = lines[1:]                  # irrelevant, discard for GET.
-   
-   query_string = ""
-   if '?' in path:
-      path, query_string = path.split('?', 1)
+   if (request_type == 'GET'):
 
-   # build environ & start_response
-   environ = {}
-   environ['PATH_INFO'] = path
-   environ['QUERY_STRING'] = query_string
+      request_headers = lines[1:]                  # irrelevant, discard for GET.
+   
+      query_string = ""
+      if '?' in path:
+         path, query_string = path.split('?', 1)
+
+      # build environ & start_response
+      environ = {}
+      environ['PATH_INFO'] = path
+      environ['QUERY_STRING'] = query_string
+
+   elif (request_type == 'POST'):
+      
+      request_json = lines[-1:][0]
+      output = StringIO.StringIO(request_json)
+      environ = {}
+      length = len(request_json)
+      environ['PATH_INFO'] = path
+      environ['REQUEST_METHOD'] = request_type
+      environ['CONTENT_LENGTH'] = length
+      environ['wsgi.input'] = output
+
 
    d = {}
    def start_response(status, headers):

@@ -5,7 +5,7 @@ import time
 from drinkz.app import SimpleApp
 import simplejson
 import StringIO
-
+ 
 the_app = SimpleApp()
 
 s = socket.socket()         # Create a socket object

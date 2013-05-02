@@ -8,6 +8,8 @@ import StringIO
  
 the_app = SimpleApp()
 
+# Server
+
 s = socket.socket()         # Create a socket object
 host = socket.gethostname() # Get local machine name
 port = random.randint(8000, 9999)
